@@ -1,6 +1,6 @@
 from playwright.sync_api import sync_playwright
 
-url = 'https://www.governmentjobs.com/careers/michigan?department[0]=State%20Police&department[1]=Technology%2C%20Management%20and%20Budget&sort=Salary%7CDescending'
+url = 'https://www.governmentjobs.com/careers/michigan?department[0]=State%20Police&department[1]=Technology%2C%20Management%20and%20Budget&sort=PositionTitle%7CAscending'
 
 
 # import nest_asyncio;
