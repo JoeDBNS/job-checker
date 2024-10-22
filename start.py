@@ -82,7 +82,7 @@ with sync_playwright() as pw:
 
         job_postings.append([
             is_posting_new,
-            posting.select_one('h3').text.replace('\\n', '').strip(),
+            posting.select_one('h3').text.replace('\\n', '').replace('\nNew', '').strip(),
             posting_details_top[0].text.replace('\\n', '').strip(),
             posting_details_top[1].contents[0].replace('\\n', '').strip(),
             posting_details_top[1].contents[2].replace('\\n', '').strip(),
@@ -133,7 +133,7 @@ with sync_playwright() as pw:
 
             job_postings.append([
                 is_posting_new,
-                posting.select_one('h3').text.replace('\\n', '').strip(),
+                posting.select_one('h3').text.replace('\\n', '').replace('\nNew', '').strip(),
                 posting_details_top[0].text.replace('\\n', '').strip(),
                 posting_details_top[1].contents[0].replace('\\n', '').strip(),
                 posting_details_top[1].contents[2].replace('\\n', '').strip(),
