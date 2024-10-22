@@ -64,7 +64,7 @@ def SetColumnSize(ws, column_sizes):
 
             adjusted_width = (max_length + 2)
             ws.column_dimensions[column_letter].width = adjusted_width
-        
+
         else:
             ws.column_dimensions[column_letter].width = column_sizes[idx]
 
