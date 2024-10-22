@@ -50,6 +50,8 @@ with sync_playwright() as pw:
     if ((total_postings % total_postings_per_page) > 0):
         total_pages += 1
 
+    # Bad fix for broken posting count display - !!!!
+    total_pages = 20
 
     for posting in soup.select('.list-item'):
         posting_details_top = posting.select_one('.list-meta').contents
@@ -146,6 +148,10 @@ with sync_playwright() as pw:
         page_number += 1
 
         print('Total Postings Found:', len(job_postings) - 1)
+
+        # Bad fix for broken posting count display - !!!!
+        if (len(soup.select('.list-item')) < 10):
+            break
 
     browser.close()
 
