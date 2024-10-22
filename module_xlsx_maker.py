@@ -47,22 +47,26 @@ def SetColumnColors(ws, column_colors):
             ws[col.coordinate].fill = PatternFill(start_color=column_colors[idx], end_color=column_colors[idx], fill_type='solid')
 
 
-def SetColumnSize(ws):
-    for col in ws.columns:
+def SetColumnSize(ws, column_sizes):
+    for idx, col in enumerate(ws.columns):
         max_length = 7
         column_letter = col[0].column_letter
 
-        for cell in col:
-            cell.alignment = Alignment(horizontal='left')
+        if (column_sizes[idx] == 0):
+            for cell in col:
+                cell.alignment = Alignment(horizontal='left')
 
-            try:
-                if len(str(cell.value)) > max_length:
-                    max_length = len(cell.value)
-            except Exception as error:
-                pass
+                try:
+                    if len(str(cell.value)) > max_length:
+                        max_length = len(cell.value)
+                except Exception as error:
+                    pass
 
-        adjusted_width = (max_length + 2)
-        ws.column_dimensions[column_letter].width = adjusted_width
+            adjusted_width = (max_length + 2)
+            ws.column_dimensions[column_letter].width = adjusted_width
+        
+        else:
+            ws.column_dimensions[column_letter].width = column_sizes[idx]
 
 
 def SetFindingsHyperlinks(ws):
@@ -76,16 +80,16 @@ def SetFindingsHyperlinks(ws):
                 cell.style = "Hyperlink"
 
 
-def BuildXlsxFile(name, data, column_colors):
+def BuildXlsxFile(name, data, column_colors, column_sizes):
     wb, ws = Setup()
 
     for row in data:
         ws.append(row)
 
-    SetColumnSize(ws)
+    SetColumnSize(ws, column_sizes)
 
     SetFindingsHyperlinks(ws)
     SetColumnColors(ws, column_colors)
-    SetColumnSize(ws)
+    SetColumnSize(ws, column_sizes)
 
     return SaveFile(wb, name)
