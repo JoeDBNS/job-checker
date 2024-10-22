@@ -157,8 +157,8 @@ with sync_playwright() as pw:
 
     print('\n\nTotal Postings Found:', len(job_postings) - 1)
 
-    column_colors = []
-    for posting in job_postings:
+    column_colors = ['d4d4d4']
+    for posting in job_postings[1:]:
         if posting[10]:
             column_colors.append('6DFA91')
         else:
