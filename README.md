@@ -1,8 +1,5 @@
 # job-checker
 
-https://scrapfly.io/blog/web-scraping-with-playwright-and-python/
-
-
 
 Sites to Scan:
 - https://www.governmentjobs.com/careers/michigan?department[0]=State%20Police&department[1]=Technology%2C%20Management%20and%20Budget&sort=PositionTitle%7CAscending
