@@ -159,7 +159,7 @@ with sync_playwright() as pw:
     column_colors = []
     for posting in job_postings:
         if posting[0]:
-            column_colors.append('008000')
+            column_colors.append('6DFA91')
         else:
             column_colors.append('FFFFFF')
 
