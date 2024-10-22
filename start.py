@@ -8,7 +8,7 @@ page_number = 1
 
 job_postings = [
     [
-        'is_new',
+        'link',
         'label',
         'location',
         'type',
@@ -18,7 +18,7 @@ job_postings = [
         'posted_on',
         'closes_in_x',
         'closes_in_type',
-        'link'
+        'is_new'
     ]
 ]
 
@@ -81,7 +81,7 @@ with sync_playwright() as pw:
                 closes_in_type = posting_details_bottom[2].contents[0].split(' ')[-1]
 
         job_postings.append([
-            is_posting_new,
+            url_host + posting.select_one('h3').select_one('a').get('href'),
             posting.select_one('h3').text.replace('\\n', '').replace('\nNew', '').strip(),
             posting_details_top[0].text.replace('\\n', '').strip(),
             posting_details_top[1].contents[0].replace('\\n', '').strip(),
@@ -91,7 +91,7 @@ with sync_playwright() as pw:
             posting_details_bottom[0].contents[0].contents[0],
             closes_in_x,
             closes_in_type,
-            url_host + posting.select_one('h3').select_one('a').get('href')
+            is_posting_new
         ])
 
 
@@ -132,7 +132,7 @@ with sync_playwright() as pw:
                     closes_in_type = posting_details_bottom[2].contents[0].split(' ')[-1]
 
             job_postings.append([
-                is_posting_new,
+                url_host + posting.select_one('h3').select_one('a').get('href'),
                 posting.select_one('h3').text.replace('\\n', '').replace('\nNew', '').strip(),
                 posting_details_top[0].text.replace('\\n', '').strip(),
                 posting_details_top[1].contents[0].replace('\\n', '').strip(),
@@ -142,7 +142,7 @@ with sync_playwright() as pw:
                 posting_details_bottom[0].contents[0].contents[0],
                 closes_in_x,
                 closes_in_type,
-                url_host + posting.select_one('h3').select_one('a').get('href')
+                is_posting_new
             ])
 
         page_number += 1
@@ -159,7 +159,7 @@ with sync_playwright() as pw:
 
     column_colors = []
     for posting in job_postings:
-        if posting[0]:
+        if posting[10]:
             column_colors.append('6DFA91')
         else:
             column_colors.append('FFFFFF')

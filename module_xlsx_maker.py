@@ -74,7 +74,7 @@ def SetFindingsHyperlinks(ws):
         column_letter = col[0].column_letter
 
         # hard coding column with hyperlinks
-        if(column_letter == 'K'):
+        if(column_letter == 'A'):
             for cell in col[1:]:
                 cell.hyperlink = cell.value
                 cell.style = "Hyperlink"
