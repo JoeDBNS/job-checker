@@ -13,4 +13,4 @@ COPY        ./src ./
 ENTRYPOINT  [ "python", "run_reports.py" ]
 
 
-# docker container run -it --mount type=bind,source="C:\Temp\_reports\job-postings",target=/app/_reports
+# docker run v0.1 -it -d --mount type=bind,source="C:\Temp\_reports\job-postings",target=/app/_reports
