@@ -6,7 +6,21 @@ url_host = 'https://www.governmentjobs.com'
 url_path = '/careers/michigan?department[0]=State%20Police&department[1]=Technology%2C%20Management%20and%20Budget&sort=PositionTitle%7CAscending&page='
 page_number = 1
 
-job_postings = []
+job_postings = [
+    [
+        'is_new',
+        'label',
+        'location',
+        'type',
+        'pay',
+        'category',
+        'department',
+        'posted_on',
+        'closes_in_x',
+        'closes_in_type',
+        'link'
+    ]
+]
 
 
 def GetPostingsUrlByPage(page):
@@ -21,11 +35,13 @@ with sync_playwright() as pw:
 
 
     page.goto(GetPostingsUrlByPage(page_number))
-    soup = BeautifulSoup(page.content(), features='html.parser')
 
     page.wait_for_selector('#job-postings-number')
+    page.wait_for_selector('.list-item')
 
-    # This number is usually wrong but I do not know why !!!!
+    soup = BeautifulSoup(page.content(), features='html.parser')
+
+    # This number is usually wrong but I do not know why - !!!!
     total_postings = int(soup.select_one('#job-postings-number').text)
     total_postings_per_page = len(soup.select('.list-item'))
 
@@ -62,23 +78,28 @@ with sync_playwright() as pw:
                 closes_in_x = posting_details_bottom[2].contents[0].split(' ')[2]
                 closes_in_type = posting_details_bottom[2].contents[0].split(' ')[-1]
 
-        job_postings.append({
-            'is_new': is_posting_new,
-            'label': posting.select_one('h3').text.replace('\\n', '').strip(),
-            'location': posting_details_top[0].text.replace('\\n', '').strip(),
-            'type': posting_details_top[1].contents[0].replace('\\n', '').strip(),
-            'pay': posting_details_top[1].contents[2].replace('\\n', '').strip(),
-            'category': posting_details_top[2].contents[0].replace('\\n', '').strip(),
-            'department': posting_details_top[3].contents[0].replace('\\n', '').strip(),
-            'posted_on': posting_details_bottom[0].contents[0].contents,
-            'closes_in_x': closes_in_x,
-            'closes_in_type': closes_in_type,
-            'link': url_host + posting.select_one('h3').select_one('a').get('href')
-        })
+        job_postings.append([
+            is_posting_new,
+            posting.select_one('h3').text.replace('\\n', '').strip(),
+            posting_details_top[0].text.replace('\\n', '').strip(),
+            posting_details_top[1].contents[0].replace('\\n', '').strip(),
+            posting_details_top[1].contents[2].replace('\\n', '').strip(),
+            posting_details_top[2].contents[0].replace('\\n', '').strip(),
+            posting_details_top[3].contents[0].replace('\\n', '').strip(),
+            posting_details_bottom[0].contents[0].contents[0],
+            closes_in_x,
+            closes_in_type,
+            url_host + posting.select_one('h3').select_one('a').get('href')
+        ])
 
+
+    print('Total Postings Found:', len(job_postings) - 1)
 
     for page_number in range(1, total_pages):
         page.goto(GetPostingsUrlByPage(page_number))
+
+        page.wait_for_selector('.list-item')
+
         soup = BeautifulSoup(page.content(), features='html.parser')
 
         for posting in soup.select('.list-item'):
@@ -108,29 +129,30 @@ with sync_playwright() as pw:
                     closes_in_x = posting_details_bottom[2].contents[0].split(' ')[2]
                     closes_in_type = posting_details_bottom[2].contents[0].split(' ')[-1]
 
-            job_postings.append({
-                'is_new': is_posting_new,
-                'label': posting.select_one('h3').text.replace('\\n', '').strip(),
-                'location': posting_details_top[0].text.replace('\\n', '').strip(),
-                'type': posting_details_top[1].contents[0].replace('\\n', '').strip(),
-                'pay': posting_details_top[1].contents[2].replace('\\n', '').strip(),
-                'category': posting_details_top[2].contents[0].replace('\\n', '').strip(),
-                'department': posting_details_top[3].contents[0].replace('\\n', '').strip(),
-                'posted_on': posting_details_bottom[0].contents[0].contents,
-                'closes_in_x': closes_in_x,
-                'closes_in_type': closes_in_type,
-                'link': url_host + posting.select_one('h3').select_one('a').get('href')
-            })
+            job_postings.append([
+                is_posting_new,
+                posting.select_one('h3').text.replace('\\n', '').strip(),
+                posting_details_top[0].text.replace('\\n', '').strip(),
+                posting_details_top[1].contents[0].replace('\\n', '').strip(),
+                posting_details_top[1].contents[2].replace('\\n', '').strip(),
+                posting_details_top[2].contents[0].replace('\\n', '').strip(),
+                posting_details_top[3].contents[0].replace('\\n', '').strip(),
+                posting_details_bottom[0].contents[0].contents[0],
+                closes_in_x,
+                closes_in_type,
+                url_host + posting.select_one('h3').select_one('a').get('href')
+            ])
 
         page_number += 1
 
+        print('Total Postings Found:', len(job_postings) - 1)
 
     browser.close()
 
 
     column_colors = []
     for posting in job_postings:
-        if posting['is_new']:
+        if posting[0]:
             column_colors.append('008000')
         else:
             column_colors.append('FFFFFF')
