@@ -106,6 +106,10 @@ with sync_playwright() as pw:
         page.goto(GetPostingsUrlByPage(page_number))
 
         print('TASK:\tWait --> .list-item')
+        try:
+            page.wait_for_selector('.list-item')
+        except:
+            break
 
         soup = BeautifulSoup(page.content(), features='html.parser')
 
