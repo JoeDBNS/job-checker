@@ -1,5 +1,6 @@
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
+import module_xlsx_maker as xm
 
 url_host = 'https://www.governmentjobs.com'
 url_path = '/careers/michigan?department[0]=State%20Police&department[1]=Technology%2C%20Management%20and%20Budget&sort=PositionTitle%7CAscending&page='
@@ -13,7 +14,8 @@ def GetPostingsUrlByPage(page):
 
 
 with sync_playwright() as pw:
-    browser = pw.chromium.launch(headless=False, slow_mo=1000)
+    # browser = pw.chromium.launch(headless=False, slow_mo=1000)
+    browser = pw.chromium.launch(headless=True)
     context = browser.new_context(viewport={'width': 690, 'height': 740})
     page = context.new_page()
 
@@ -123,8 +125,14 @@ with sync_playwright() as pw:
         page_number += 1
 
 
-
-    print(job_postings)
-
-
     browser.close()
+
+
+    column_colors = []
+    for posting in job_postings:
+        if posting['is_new']:
+            column_colors.append('008000')
+        else:
+            column_colors.append('FFFFFF')
+
+    xm.BuildXlsxFile('som_jobs', job_postings, column_colors)
