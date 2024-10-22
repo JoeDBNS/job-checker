@@ -28,15 +28,20 @@ def GetPostingsUrlByPage(page):
 
 
 with sync_playwright() as pw:
+    print('TASK:\tBrowser Start')
+
     # browser = pw.chromium.launch(headless=False, slow_mo=1000)
     browser = pw.chromium.launch(headless=True)
     context = browser.new_context(viewport={'width': 690, 'height': 740})
     page = context.new_page()
 
-
+    print('TASK:\tGoTo -->', GetPostingsUrlByPage(page_number))
     page.goto(GetPostingsUrlByPage(page_number))
 
+    print('TASK:\tWait --> #job-postings-number')
     page.wait_for_selector('#job-postings-number')
+
+    print('TASK:\tWait --> .list-item')
     page.wait_for_selector('.list-item')
 
     soup = BeautifulSoup(page.content(), features='html.parser')
@@ -94,13 +99,13 @@ with sync_playwright() as pw:
             is_posting_new
         ])
 
-
     print('\n\nGathering Postings...', len(job_postings) - 1)
 
     for page_number in range(1, total_pages):
+        print('TASK:\tGoTo -->', GetPostingsUrlByPage(page_number))
         page.goto(GetPostingsUrlByPage(page_number))
 
-        page.wait_for_selector('.list-item')
+        print('TASK:\tWait --> .list-item')
 
         soup = BeautifulSoup(page.content(), features='html.parser')
 
@@ -153,9 +158,8 @@ with sync_playwright() as pw:
         if (len(soup.select('.list-item')) < 10):
             break
 
+    print('TASK:\tBrowser Close')
     browser.close()
-
-    print('\n\nTotal Postings Found:', len(job_postings) - 1)
 
     column_colors = ['d4d4d4']
     for posting in job_postings[1:]:
@@ -178,4 +182,5 @@ with sync_playwright() as pw:
         0
     ]
 
+    print('TASK:\tBuild .xlsx File')
     xm.BuildXlsxFile('som_jobs', job_postings, column_colors, column_sizes)
