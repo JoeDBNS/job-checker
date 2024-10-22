@@ -95,7 +95,7 @@ with sync_playwright() as pw:
         ])
 
 
-    print('Total Postings Found:', len(job_postings) - 1)
+    print('\n\nGathering Postings...', len(job_postings) - 1)
 
     for page_number in range(1, total_pages):
         page.goto(GetPostingsUrlByPage(page_number))
@@ -147,7 +147,7 @@ with sync_playwright() as pw:
 
         page_number += 1
 
-        print('Total Postings Found:', len(job_postings) - 1)
+        print('Gathering Postings...', len(job_postings) - 1)
 
         # Bad fix for broken posting count display - !!!!
         if (len(soup.select('.list-item')) < 10):
@@ -155,6 +155,7 @@ with sync_playwright() as pw:
 
     browser.close()
 
+    print('\n\nTotal Postings Found:', len(job_postings) - 1)
 
     column_colors = []
     for posting in job_postings:
