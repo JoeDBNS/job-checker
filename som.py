@@ -154,7 +154,7 @@ with sync_playwright() as pw:
 
         print('Gathering Postings...', len(job_postings) - 1)
 
-        # Bad fix for broken posting count display - !!!!
+        # Bad fix for broken posting count display - DOESNT WORK IF REAL TOTAL IS A MULTIPLE OF 10 - !!!!
         if (len(soup.select('.list-item')) < 10):
             break
 
