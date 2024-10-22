@@ -164,4 +164,18 @@ with sync_playwright() as pw:
         else:
             column_colors.append('FFFFFF')
 
-    xm.BuildXlsxFile('som_jobs', job_postings, column_colors)
+    column_sizes = [
+        34,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    ]
+
+    xm.BuildXlsxFile('som_jobs', job_postings, column_colors, column_sizes)
