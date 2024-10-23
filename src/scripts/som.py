@@ -45,7 +45,6 @@ def RunScan():
 
         soup = BeautifulSoup(page.content(), features='html.parser')
 
-
         # This number is usually wrong but I do not know why - !!!!
         total_postings = int(soup.select_one('#job-postings-number').text)
         total_postings_per_page = len(soup.select('.list-item'))
