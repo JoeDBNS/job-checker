@@ -8,7 +8,7 @@ def GetPostingsUrlByPage(url_host, url_path, page):
 
 def RunScan():
     url_host = 'https://www.governmentjobs.com'
-    url_path = '/careers/michigan?department[0]=State%20Police&department[1]=Technology%2C%20Management%20and%20Budget&sort=PositionTitle%7CAscending&page='
+    url_path = '/careers/michigan?department[0]=State%20Police&department[1]=Technology%2C%20Management%20and%20Budget&department[2]=House%20of%20Representatives&sort=PositionTitle%7CAscending&page='
     page_number = 1
     job_postings = [
         [
