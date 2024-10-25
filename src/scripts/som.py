@@ -45,18 +45,6 @@ def RunScan():
 
         soup = BeautifulSoup(page.content(), features='html.parser')
 
-        # This number is usually wrong but I do not know why - !!!!
-        total_postings = int(soup.select_one('#job-postings-number').text)
-        total_postings_per_page = len(soup.select('.list-item'))
-
-        total_pages = total_postings // total_postings_per_page
-
-        if ((total_postings % total_postings_per_page) > 0):
-            total_pages += 1
-
-        # Bad fix for broken posting count display - !!!!
-        total_pages = 20
-
         for posting in soup.select('.list-item'):
             posting_details_top = posting.select_one('.list-meta').contents
             posting_details_top = [i for i in posting_details_top if i != '\n']
@@ -100,7 +88,7 @@ def RunScan():
 
         print('\n\nGathering Postings...', len(job_postings) - 1)
 
-        for page_number in range(1, total_pages):
+        for page_number in range(1, 99):
             print('TASK:\tGoTo -->', GetPostingsUrlByPage(url_host, url_path, page_number))
             page.goto(GetPostingsUrlByPage(url_host, url_path, page_number))
 
@@ -157,7 +145,6 @@ def RunScan():
 
             print('Gathering Postings...', len(job_postings) - 1)
 
-            # Bad fix for broken posting count display - DOESNT WORK IF REAL TOTAL IS A MULTIPLE OF 10 - !!!!
             if (len(soup.select('.list-item')) < 10):
                 break
 
