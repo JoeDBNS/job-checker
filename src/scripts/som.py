@@ -1,6 +1,5 @@
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
-import modules.module_xlsx_maker as xm
 
 
 def GetPostingsUrlByPage(url_host, url_path, page):
@@ -10,21 +9,7 @@ def RunScan():
     url_host = 'https://www.governmentjobs.com'
     url_path = '/careers/michigan?department[0]=State%20Police&department[1]=Technology%2C%20Management%20and%20Budget&department[2]=House%20of%20Representatives&sort=PositionTitle%7CAscending&page='
     page_number = 1
-    job_postings = [
-        [
-            'link',
-            'label',
-            'department',
-            'category',
-            'location',
-            'type',
-            'pay',
-            'posted_on',
-            'closes_in_x',
-            'closes_in_type',
-            'is_new'
-        ]
-    ]
+    job_postings = []
 
     with sync_playwright() as pw:
         print('TASK:\tBrowser Start')
@@ -40,8 +25,8 @@ def RunScan():
         print('TASK:\tWait --> #job-postings-number')
         page.wait_for_selector('#job-postings-number')
 
-        print('TASK:\tWait --> .list-item')
-        page.wait_for_selector('.list-item')
+        print('TASK:\tWait --> #job-list-container')
+        page.wait_for_selector('#job-list-container')
 
         soup = BeautifulSoup(page.content(), features='html.parser')
 
@@ -86,19 +71,21 @@ def RunScan():
                 is_posting_new
             ])
 
-        print('\n\nGathering Postings...', len(job_postings) - 1)
+        print('\n\nGathering Postings...', len(job_postings))
 
-        for page_number in range(1, 99):
+        page_number = 1
+
+        while True:
             print('TASK:\tGoTo -->', GetPostingsUrlByPage(url_host, url_path, page_number))
             page.goto(GetPostingsUrlByPage(url_host, url_path, page_number))
 
-            print('TASK:\tWait --> .list-item')
-            try:
-                page.wait_for_selector('.list-item')
-            except:
-                break
+            print('TASK:\tWait --> #job-list-container')
+            page.wait_for_selector('#job-list-container')
 
             soup = BeautifulSoup(page.content(), features='html.parser')
+
+            if (len(soup.select('.list-item')) < 1):
+                break
 
             for posting in soup.select('.list-item'):
                 posting_details_top = posting.select_one('.list-meta').contents
@@ -143,34 +130,111 @@ def RunScan():
 
             page_number += 1
 
-            print('Gathering Postings...', len(job_postings) - 1)
+            print('Gathering Postings...', len(job_postings))
 
+            # Don't scan next page if this page didn't have a full set of results
             if (len(soup.select('.list-item')) < 10):
                 break
 
         print('TASK:\tBrowser Close')
         browser.close()
 
-        column_colors = ['d4d4d4']
-        for posting in job_postings[1:]:
-            if posting[10]:
-                column_colors.append('6DFA91')
-            else:
-                column_colors.append('FFFFFF')
+        ws_content = {
+            'name': 'SOM',
+            'config': {
+                'general': {
+                    'add_headers': True
+                },
+                'columns': [
+                    {
+                        'label': 'Link',
+                        'size': 30,
+                        'filter': False,
+                        'is_link': True
+                    },
+                    {
+                        'label': 'Label',
+                        'size': 0,
+                        'filter': False,
+                        'is_link': False
+                    },
+                    {
+                        'label': 'Department',
+                        'size': 0,
+                        'filter': False,
+                        'is_link': False
+                    },
+                    {
+                        'label': 'Category',
+                        'size': 0,
+                        'filter': False,
+                        'is_link': False
+                    },
+                    {
+                        'label': 'Location',
+                        'size': 0,
+                        'filter': False,
+                        'is_link': False
+                    },
+                    {
+                        'label': 'Job Type',
+                        'size': 0,
+                        'filter': False,
+                        'is_link': False
+                    },
+                    {
+                        'label': 'Pay',
+                        'size': 0,
+                        'filter': False,
+                        'is_link': False
+                    },
+                    {
+                        'label': 'Posted On',
+                        'size': 0,
+                        'filter': False,
+                        'is_link': False
+                    },
+                    {
+                        'label': 'Closes In',
+                        'size': 0,
+                        'filter': False,
+                        'is_link': False
+                    },
+                    {
+                        'label': 'Closes Type',
+                        'size': 0,
+                        'filter': False,
+                        'is_link': False
+                    },
+                    {
+                        'label': 'New',
+                        'size': 0,
+                        'filter': False,
+                        'is_link': False
+                    }
+                ],
+                'rows': {
+                    'colors': []
+                }
+            },
+            'data': job_postings
+        }
 
-        column_sizes = [
-            34,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-        ]
+        # Color headers row gray
+        ws_content['config']['rows']['colors'].append(
+            {
+                'row_num': 0,
+                'color_hex': 'd4d4d4'
+            }
+        )
+        # Color data row green if 'new' flag is True
+        for i, posting in enumerate(ws_content['data'], start = 1):
+            if posting[10] == True:
+                ws_content['config']['rows']['colors'].append(
+                    {
+                        'row_num': i,
+                        'color_hex': '6DFA91'
+                    }
+                )
 
-        print('TASK:\tBuild .xlsx File')
-        xm.BuildXlsxFile('som_jobs', job_postings, column_colors, column_sizes)
+    return ws_content
