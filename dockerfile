@@ -17,4 +17,4 @@ ENTRYPOINT  [ "python", "run_reports.py" ]
 
 # docker push joedbns/job-checker:v_._
 
-# docker run v0.1 -it -d --mount type=bind,source="C:\Temp\_reports\job-postings",target=/app/_reports
+# docker run joedbns/job-checker:v_._ -it -d --mount type=bind,source="C:\Temp\mounts\_reports\job-postings",target=/app/_reports
