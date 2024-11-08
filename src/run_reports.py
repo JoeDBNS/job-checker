@@ -10,4 +10,9 @@ wb_content = {
 som_worksheet = som.RunScan()
 wb_content['sheets'].append(som_worksheet)
 
+
+print('TASK:\tBuilding Xlsx')
+
 xm.BuildXlsxFile(wb_content)
+
+print('TASK:\tXlsx Build Complete')
