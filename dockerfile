@@ -17,4 +17,6 @@ ENTRYPOINT  [ "python", "run_reports.py" ]
 
 # docker push joedbns/job-checker:v_._
 
-# docker run joedbns/job-checker:v_._ -it -d --mount type=bind,source="C:\Temp\mounts\_reports\job-postings",target=/app/_reports
+# docker volume create --name volume_reports --opt type=none --opt device="C:/Temp/mounts/_reports" --opt o=bind
+
+# docker run joedbns/job-checker:v_._ -it -d --mount type=bind,source=volume_reports,target=/app/_reports
