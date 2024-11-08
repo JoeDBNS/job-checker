@@ -53,26 +53,27 @@ def SetColumnSizes(wb, sheet_content):
         min_length = 7
         column_letter = col[0].column_letter
 
-        # Later Task: break out cell.alignment into own function
-        if (sheet_content['config']['columns'][i]['size'] == 0):
-            for cell in col:
-                cell.alignment = Alignment(horizontal='left')
+        if (len(sheet_content['config']['columns']) > 0):
+            # Later Task: break out cell.alignment into own function
+            if (sheet_content['config']['columns'][i]['size'] == 0):
+                for cell in col:
+                    cell.alignment = Alignment(horizontal='left')
 
-                # Column width is defined by character count
-                try:
-                    if len(str(cell.value)) > min_length:
-                        min_length = len(cell.value)
-                except Exception as error:
-                    pass
+                    # Column width is defined by character count
+                    try:
+                        if len(str(cell.value)) > min_length:
+                            min_length = len(cell.value)
+                    except Exception as error:
+                        pass
 
-            adjusted_width = (min_length + 2)
-            wb[sheet_content['name']].column_dimensions[column_letter].width = adjusted_width
+                adjusted_width = (min_length + 2)
+                wb[sheet_content['name']].column_dimensions[column_letter].width = adjusted_width
 
-        else:
-            for cell in col:
-                cell.alignment = Alignment(horizontal='left')
+            else:
+                for cell in col:
+                    cell.alignment = Alignment(horizontal='left')
 
-            wb[sheet_content['name']].column_dimensions[column_letter].width = sheet_content['config']['columns'][i]['size']
+                wb[sheet_content['name']].column_dimensions[column_letter].width = sheet_content['config']['columns'][i]['size']
 
 
 def SetColumnColors(wb, sheet_content):
