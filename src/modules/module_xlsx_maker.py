@@ -1,6 +1,9 @@
 # Column filters
 # https://openpyxl.readthedocs.io/en/stable/filters.html#using-filters-and-sorts
 
+# Visuals - Charts / Graphs
+# https://openpyxl.readthedocs.io/en/stable/charts/introduction.html
+
 
 
 import os, datetime as dt
