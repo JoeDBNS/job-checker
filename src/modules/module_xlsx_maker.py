@@ -139,7 +139,10 @@ def BuildXlsxFile(wb_content):
 # incoming object definition:
 # wb_content['sheets']['name'] must be unique.
 # wb_content['sheets']['data'] must ultimately be a list of lists.
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# wb_content['sheets']['config']['general']['add_headers'] whether or not header values are prepended to data in worksheet.
+# wb_content['sheets']['config']['columns'] is not required.
+# wb_content['sheets']['config']['rows']['colors'] is not required.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # wb_content = {
 #     'name': '',
 #     'sheets': [
