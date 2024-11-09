@@ -1,5 +1,6 @@
 from playwright.sync_api import sync_playwright
 from bs4 import BeautifulSoup
+import modules.module_console as con
 
 
 def GetPostingsUrlByPage(url_host, url_path, page):
