@@ -58,8 +58,8 @@ def RunScan():
                     closes_in_type = posting_details_bottom[2].contents[0].split(' ')[-1]
 
             job_postings.append([
-                url_host + posting.select_one('h3').select_one('a').get('href'),
-                posting.select_one('h3').text.replace('\\n', '').replace('\nNew', '').strip(),
+                url_host + posting.select_one('a').get('href'),
+                posting.select_one('a').text.replace('\\n', '').replace('\nNew', '').strip(),
                 posting_details_top[3].contents[0].replace('\\n', '').strip(),
                 posting_details_top[2].contents[0].replace('\\n', '').replace('Category: ', '').strip(),
                 posting_details_top[0].text.replace('\\n', '').strip(),
@@ -115,8 +115,8 @@ def RunScan():
                         closes_in_type = posting_details_bottom[2].contents[0].split(' ')[-1]
 
                 job_postings.append([
-                    url_host + posting.select_one('h3').select_one('a').get('href'),
-                    posting.select_one('h3').text.replace('\\n', '').replace('\nNew', '').strip(),
+                    url_host + posting.select_one('a').get('href'),
+                    posting.select_one('a').text.replace('\\n', '').replace('\nNew', '').strip(),
                     posting_details_top[3].contents[0].replace('\\n', '').strip(),
                     posting_details_top[2].contents[0].replace('\\n', '').replace('Category: ', '').strip(),
                     posting_details_top[0].text.replace('\\n', '').strip(),
