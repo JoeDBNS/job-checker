@@ -17,3 +17,4 @@ Python tool to iterate through pre-defined sites and find job postings.
     - https://www.techsmith.com/careers/open-positions/
     - https://rhsc.wd5.myworkdayjobs.com/Delta_Dental_of_Michigan
     - https://www.dewpoint.com/careers/
+    - https://www.seraphsecure.com/careers
