@@ -1,5 +1,6 @@
 import scripts.som as som
 import scripts.liquidweb as liquidweb
+import scripts.dewpoint as dewpoint
 import modules.module_xlsx_maker as xm
 import modules.module_console as con
 
@@ -14,6 +15,9 @@ wb_content['sheets'].append(som_worksheet)
 
 liquidweb_worksheet = liquidweb.RunScan()
 wb_content['sheets'].append(liquidweb_worksheet)
+
+dewpoint_worksheet = dewpoint.RunScan()
+wb_content['sheets'].append(dewpoint_worksheet)
 
 con.Info('TASK:\tBuilding Xlsx')
 
