@@ -13,8 +13,8 @@ def RunScan():
     with sync_playwright() as pw:
         print('TASK:\tBrowser Start')
 
-        browser = pw.chromium.launch(headless=False, slow_mo=1000)
-        # browser = pw.chromium.launch(headless=True)
+        # browser = pw.chromium.launch(headless=False, slow_mo=1000)
+        browser = pw.chromium.launch(headless=True)
         context = browser.new_context(viewport={'width': 690, 'height': 740})
         page = context.new_page()
 
