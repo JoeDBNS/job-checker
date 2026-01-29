@@ -71,7 +71,7 @@ def RunScan():
                 is_posting_new
             ])
 
-        print('\n\nGathering Postings...', len(job_postings))
+        print('Gathering Postings...', len(job_postings))
 
         page_number = 1
 
